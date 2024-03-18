@@ -1,0 +1,7 @@
+# Made in NeoVim <3
+
+.vs/
+.idea/
+
+**/bin/
+**/obj/
