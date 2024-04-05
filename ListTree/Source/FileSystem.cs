@@ -2,7 +2,7 @@ namespace ListTree.Source;
 
 public static class FileSystem
 {
-    public static void ReadHierarchy(int? lifeTime, string? path = null, int shift = 0, int curDepth = 0)
+    public static void ReadHierarchy(int? lifeTime, List<string> ignore, string? path = null, int shift = 0, int curDepth = 0)
     {
 	string shifter = new String(' ', shift);
 
@@ -21,6 +21,11 @@ public static class FileSystem
 	string dirFmt = Path.GetFileName(path.TrimEnd(Path.DirectorySeparatorChar));
 	string dirType = dirFmt.StartsWith('.') ? "󱞞" : "󰉋";
 
+	if (ignore.Contains(dirFmt))
+	{
+		return;
+	}
+
 	Console.ForegroundColor = ConsoleColor.DarkYellow;
 	    Console.WriteLine($"{shifter}{dirType} {dirFmt}");
 	Console.ResetColor();
@@ -33,6 +38,11 @@ public static class FileSystem
 	foreach (string file in files) 
 	{
 	    string fileFmt = Path.GetFileName(file.TrimEnd(Path.DirectorySeparatorChar));
+		if (ignore.Contains(fileFmt))
+		{
+			continue;
+		}
+
 	    string fileType = Path.GetFileName(fileFmt.StartsWith('.') ? "󰘓" : "");
 
 	    Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -46,6 +56,7 @@ public static class FileSystem
 	{
 	    ReadHierarchy(
 		lifeTime,
+		ignore,
 		subDirectory,
 		shift + 2,
 		curDepth + 1

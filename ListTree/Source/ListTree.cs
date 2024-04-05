@@ -3,7 +3,9 @@
 public static class ListTree
 {
     private static int? _maxDepth;
+
     private static readonly List<string> Paths = new List<string>();
+    private static readonly List<string> IgnorePaths = new List<string>();
 
     public static void Main(string[] args)
     {
@@ -67,6 +69,21 @@ public static class ListTree
                         Console.ResetColor();
                         return;
 
+                    case "--ignore":
+                    case "-i":
+                        if (args.Length - 1 < index + 1)
+                        {
+                            Console.WriteLine("Dumb.");
+                            return;
+                        }
+
+                        string path = args[index + 1].Trim();
+                        string ignoreName = Path.GetFileName(path.Split(Path.DirectorySeparatorChar).Last());
+                        IgnorePaths.Add(ignoreName);
+
+                        valueFlag = true;
+                        break;
+
                     default:
                         if (File.Exists(keyword))
                         {
@@ -90,13 +107,13 @@ public static class ListTree
             {
                 foreach (string path in Paths)
                 {
-                    FileSystem.ReadHierarchy(_maxDepth, path);
+                    FileSystem.ReadHierarchy(_maxDepth, IgnorePaths, path);
                 }
 
                 return;
             }
         }
 
-        FileSystem.ReadHierarchy(_maxDepth);
+        FileSystem.ReadHierarchy(_maxDepth, IgnorePaths);
     }
 }
